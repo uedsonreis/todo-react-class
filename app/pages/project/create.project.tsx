@@ -1,4 +1,10 @@
+import React from "react"
+import { useNavigate } from "react-router"
+
 import type { Route } from "./+types/list.project"
+
+import { addProject } from "../../services/project.repo"
+import MyInput from "~/components/my.input"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -7,36 +13,59 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function CreateProject() {
+
+    const navigate = useNavigate()
+
+    const [name, setName] = React.useState("")
+    const [description, setDescription] = React.useState("")
+    const [deadline, setDeadline] = React.useState("")
+
+    function goBack() {
+        navigate(-1)
+    }
+
+    function save() {
+        if (!name || name == '') {
+            alert("Por favor, informe o nome do projeto.")
+            return
+        }
+
+        let date = undefined
+        if (deadline && deadline != '') date = new Date(deadline)
+
+        const project = { name, description, deadline: date }
+
+        console.log('Salvando projeto: ', project)
+        const saved = addProject(project)
+
+        if (saved) {
+            goBack()
+        } else {
+            alert("Já existe um projeto com esse nome. Por favor, escolha outro nome.")
+        }
+    }
+
     return (
         <div className="container">
             <header className="header">
                 <h2>Criar novo Projeto</h2>
             </header>
 
-            <main>
-                <div className="div-input mb-5">
-                    <span className="mr-5">Nome:</span>
-                    <input className="my-input" type="text" onChange={() => {}} />
-                </div>
+            <main className="flex flex-col justify-center min-h-[300px]">
+                <MyInput className="mb-5" title="Nome" change={setName} />
 
-                <div className="div-input mb-5">
-                    <span className="mr-5">Prazo:</span>
-                    <input className="my-input" type="date" onChange={() => {}} />
-                </div>
+                <MyInput className="mb-5" type='date' title="Prazo" change={setDeadline} />
 
-                <div className="div-input">
-                    <span className="mr-5">Descrição:</span>
-                    <textarea className="my-input" onChange={() => {}} />
-                </div>
+                <MyInput title="Descrição" change={setDescription} />
 
             </main>
             
             <footer className="footer">
-                <button className="my-button color-gray" onClick={() => {}}>
+                <button className="my-button color-gray" onClick={goBack}>
                     Cancelar
                 </button>
                 
-                <button className="my-button color-green" onClick={() => {}}>
+                <button className="my-button color-green" onClick={save}>
                     Salvar
                 </button>
             </footer>

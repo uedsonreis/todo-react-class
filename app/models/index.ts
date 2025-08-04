@@ -1,5 +1,5 @@
 export interface Project {
     name: string
-    deadline: Date
+    deadline?: Date
     description?: string
 }
