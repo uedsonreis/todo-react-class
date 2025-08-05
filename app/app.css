@@ -16,7 +16,7 @@ body {
 
 .container {
     width: 100%;
-    margin: 20px;
+    padding: 40px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -54,21 +54,45 @@ body {
 .color-green {
     color: green;
 }
+.color-green:hover {
+    border-color: green;
+}
 
 .color-gray {
     color: gray;
+}
+.color-gray:hover {
+    border-color: gray;
+}
+
+.color-cyan {
+    color: cyan;
+}
+.color-cyan:hover {
+    border-color: cyan;
+}
+
+.color-red {
+    color: red;
+}
+.color-red:hover {
+    border-color: red;
+}
+
+.color-orange {
+    color: orange;
 }
 
 .my-button {
     cursor: pointer;
     padding: 5px 15px;
+    border: 1px solid transparent;
 }
 .my-button:hover {
     cursor: pointer;
     font-weight: bold;
-    padding: 5px 15px;
+    padding: 5px 13px;
     border-radius: 4px;
-    border: 1px solid white;
 }
 
 .project-item {

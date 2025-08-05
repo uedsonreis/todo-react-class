@@ -3,22 +3,27 @@ import { useNavigate, useParams } from "react-router"
 
 import type { Route } from "./+types/list.project"
 
-import { addProject } from "../../services/project.repo"
+import * as projectRepo from "../../services/project.repo"
 import MyInput from "~/components/my.input"
 
 export function meta({}: Route.MetaArgs) {
     return [
-        { title: "Criar um Projeto" }
+        { title: "Editar um Projeto" }
     ]
 }
 
-export default function CreateProject() {
+export default function UpdateProject() {
 
     const navigate = useNavigate()
+    const route = useParams<{ id: string }>()
 
-    const [name, setName] = React.useState("")
-    const [description, setDescription] = React.useState("")
-    const [deadline, setDeadline] = React.useState("")
+    const project = projectRepo.getProject(Number(route.id!))
+
+    if (!project) return <div className="container">Projeto não encontrado!</div>
+
+    const [name, setName] = React.useState(project.name)
+    const [description, setDescription] = React.useState(project.description || "")
+    const [deadline, setDeadline] = React.useState(project.deadline ? project.deadline.toISOString().substring(0, 10) : "")
 
     function goBack() {
         navigate(-1)
@@ -33,24 +38,24 @@ export default function CreateProject() {
         let date = undefined
         if (deadline && deadline != '') date = new Date(`${deadline} GMT-03:00`)
 
-        addProject({ name, description, deadline: date })
+        projectRepo.updateProject({ ...project, name, description, deadline: date })
         goBack()
     }
 
     return (
         <div className="container">
             <header className="header">
-                <h2>Criar novo Projeto</h2>
+                <h2>Editar Projeto</h2>
             </header>
 
             <main className="flex flex-col justify-center min-h-[300px]">
-                <MyInput className="mb-5" title="Nome" change={setName} />
+                <MyInput className="mb-5" title="Nome" value={name} change={setName} />
 
-                <MyInput className="mb-5" type='date' title="Prazo" change={setDeadline} />
+                <MyInput className="mb-5" type='date' title="Prazo" value={deadline} change={setDeadline} />
 
                 <div className="div-input">
                     <span className="mr-5">Descrição:</span>
-                    <textarea className="my-input" onChange={(e) => setDescription(e.target.value)} />
+                    <textarea className="my-input" value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
 
             </main>

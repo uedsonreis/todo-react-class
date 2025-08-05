@@ -1,8 +1,12 @@
-import { NavLink } from "react-router"
+import React from "react"
+import { NavLink, useNavigate } from "react-router"
 
 import type { Route } from "./+types/list.project"
 
+import type { Project } from "~/models"
 import * as projectRepo from '../../services/project.repo'
+
+import ProjectItem from "./item.project"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -13,12 +17,17 @@ export function meta({}: Route.MetaArgs) {
 
 export default function ProjectList() {
 
-    function format(date: Date | undefined): string {
-        if (!date) return "Sem prazo definido"
+    const navigate = useNavigate()
 
-        date = new Date(date)
+    const [projects, setProjects] = React.useState(projectRepo.getProjects())
 
-        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+    function onEdit(project: Project) {
+        navigate(`/projeto/update/${project.id}`)
+    }
+
+    function onDelete(project: Project) {
+        projectRepo.deleteProject(project.id!)
+        setProjects(projectRepo.getProjects())
     }
 
     return (
@@ -28,22 +37,16 @@ export default function ProjectList() {
             </header>
 
             <main className="w-full">
-                <NavLink to="/projeto/create">Adicionar</NavLink>
+                <NavLink to="/projeto/create">Adicionar Projeto</NavLink>
+                <div className="flex flex-col m-5">
+                    { projects.map((project, index) => (
+                        <ProjectItem key={index} project={project} onEdit={onEdit} onDelete={onDelete} />
+                    )) }
+                </div>
             </main>
             
             <footer className="footer">
-                <div className="flex flex-col w-full m-10">
-                    { projectRepo.getProjects().map((project, index) => (
-                        <div key={index} className="project-item">
-                            <div>
-                                {project.name}
-                            </div>
-                            <div>
-                                {format(project.deadline)}
-                            </div>
-                        </div>
-                    )) }
-                </div>
+                
             </footer>
         </div>
     )
