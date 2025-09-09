@@ -1,6 +1,6 @@
-export interface Project {
+export interface Task {
     id?: number
-    name: string
-    deadline?: Date
+    title: string
+    done: boolean
     description?: string
 }

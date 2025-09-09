@@ -12,6 +12,10 @@ body {
     @media (prefers-color-scheme: dark) {
         color-scheme: dark;
     }
+
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .container {
@@ -79,10 +83,6 @@ body {
     border-color: red;
 }
 
-.color-orange {
-    color: orange;
-}
-
 .my-button {
     cursor: pointer;
     padding: 5px 15px;
@@ -95,7 +95,7 @@ body {
     border-radius: 4px;
 }
 
-.project-item {
+.task-item {
     width: 100%;
     height: 60px;
     display: flex;

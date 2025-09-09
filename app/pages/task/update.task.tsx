@@ -1,63 +1,62 @@
 import React from "react"
 import { useNavigate, useParams } from "react-router"
 
-import type { Route } from "./+types/list.project"
+import type { Route } from "./+types/list.task"
 
-import * as projectRepo from "../../services/project.repo"
+import * as taskRepo from "../../services/task.repo"
 import MyInput from "~/components/my.input"
 
 export function meta({}: Route.MetaArgs) {
     return [
-        { title: "Editar um Projeto" }
+        { title: "Editar uma Tarefa" }
     ]
 }
 
-export default function UpdateProject() {
+export default function UpdateTask() {
 
     const navigate = useNavigate()
     const route = useParams<{ id: string }>()
 
-    const project = projectRepo.getProject(Number(route.id!))
+    const task = taskRepo.get(Number(route.id!))
 
-    if (!project) return <div className="container">Projeto não encontrado!</div>
+    if (!task) return <div className="container">Tarefa não encontrada!</div>
 
-    const [name, setName] = React.useState(project.name)
-    const [description, setDescription] = React.useState(project.description || "")
-    const [deadline, setDeadline] = React.useState(project.deadline ? project.deadline.toISOString().substring(0, 10) : "")
+    const [title, setTitle] = React.useState(task.title)
+    const [done, setDone] = React.useState(task.done)
+    const [description, setDescription] = React.useState(task.description || "")
 
     function goBack() {
         navigate(-1)
     }
 
     function save() {
-        if (!name || name == '') {
-            alert("Por favor, informe o nome do projeto.")
+        if (!title || title == '') {
+            alert("Por favor, informe o Título da tarefa.")
             return
         }
 
-        let date = undefined
-        if (deadline && deadline != '') date = new Date(`${deadline} GMT-03:00`)
-
-        projectRepo.updateProject({ ...project, name, description, deadline: date })
+        taskRepo.update({ ...task, title, description, done })
         goBack()
     }
 
     return (
         <div className="container">
             <header className="header">
-                <h2>Editar Projeto</h2>
+                <h2>Editar Tarefa</h2>
             </header>
 
             <main className="flex flex-col justify-center min-h-[300px]">
-                <MyInput className="mb-5" title="Nome" value={name} change={setName} />
-
-                <MyInput className="mb-5" type='date' title="Prazo" value={deadline} change={setDeadline} />
+                <MyInput className="mb-5" title="Nome" value={title} change={setTitle} />
 
                 <div className="div-input">
                     <span className="mr-5">Descrição:</span>
                     <textarea className="my-input" value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
 
+                <div className="flex mt-5">
+                    <span className="mr-5">Concluído:</span>
+                    <input className="w-[24px]" type="checkbox" checked={done} onChange={(e) => setDone(e.target.checked)} />
+                </div>
             </main>
             
             <footer className="footer">

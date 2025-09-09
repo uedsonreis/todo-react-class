@@ -1,52 +1,46 @@
 import React from "react"
 import { useNavigate, useParams } from "react-router"
 
-import type { Route } from "./+types/list.project"
+import type { Route } from "./+types/list.task"
 
-import { addProject } from "../../services/project.repo"
+import * as taskRepo from "../../services/task.repo"
 import MyInput from "~/components/my.input"
 
 export function meta({}: Route.MetaArgs) {
     return [
-        { title: "Criar um Projeto" }
+        { title: "Criar uma Tarefa" }
     ]
 }
 
-export default function CreateProject() {
+export default function CreateTask() {
 
     const navigate = useNavigate()
 
-    const [name, setName] = React.useState("")
+    const [title, setTitle] = React.useState("")
     const [description, setDescription] = React.useState("")
-    const [deadline, setDeadline] = React.useState("")
 
     function goBack() {
         navigate(-1)
     }
 
     function save() {
-        if (!name || name == '') {
-            alert("Por favor, informe o nome do projeto.")
+        if (!title || title == '') {
+            alert("Por favor, informe o Título da tarefa.")
             return
         }
 
-        let date = undefined
-        if (deadline && deadline != '') date = new Date(`${deadline} GMT-03:00`)
-
-        addProject({ name, description, deadline: date })
+        taskRepo.add({ title, description, done: false })
         goBack()
     }
 
     return (
         <div className="container">
             <header className="header">
-                <h2>Criar novo Projeto</h2>
+                <h2>Criar nova Tarefa</h2>
             </header>
 
             <main className="flex flex-col justify-center min-h-[300px]">
-                <MyInput className="mb-5" title="Nome" change={setName} />
-
-                <MyInput className="mb-5" type='date' title="Prazo" change={setDeadline} />
+                <MyInput className="mb-5" title="Título" change={setTitle} />
 
                 <div className="div-input">
                     <span className="mr-5">Descrição:</span>
