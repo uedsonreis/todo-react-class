@@ -16,7 +16,7 @@ export default function TaskItem({ task, onEdit, onDelete }: Props) {
                 {task.title}
             </div>
             <div className="flex">
-                <button className="my-button color-cyan" onClick={() => onEdit(task)}>Alterar</button>
+                <button className="my-button color-blue" onClick={() => onEdit(task)}>Alterar</button>
                 <button className="my-button color-red" onClick={() => onDelete(task)}>Remover</button>
             </div>
         </div>

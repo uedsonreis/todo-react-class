@@ -1,10 +1,12 @@
 import React from "react"
+import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router"
 
 import type { Route } from "./+types/list.task"
 
 import * as taskRepo from "../../services/task.repo"
 import MyInput from "~/components/my.input"
+import type { ThemeState } from "~/store/theme.slice"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -16,6 +18,7 @@ export default function UpdateTask() {
 
     const navigate = useNavigate()
     const route = useParams<{ id: string }>()
+    const theme = useSelector((state: { theme: ThemeState }) => state.theme)
 
     const task = taskRepo.get(Number(route.id!))
 
@@ -40,7 +43,7 @@ export default function UpdateTask() {
     }
 
     return (
-        <div className="container">
+        <div className={`page ${theme.mode}`}>
             <header className="header">
                 <h2>Editar Tarefa</h2>
             </header>

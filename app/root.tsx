@@ -1,3 +1,4 @@
+import { Provider } from 'react-redux'
 import {
     isRouteErrorResponse,
     Links,
@@ -6,6 +7,8 @@ import {
     Scripts,
     ScrollRestoration,
 } from "react-router"
+
+import { store } from './store'
 
 import type { Route } from "./+types/root"
 
@@ -43,7 +46,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    return <Outlet />;
+    return (
+        <Provider store={store}>
+            <Outlet />
+        </Provider>
+    )
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
