@@ -6,7 +6,7 @@ import { NavLink, useNavigate } from "react-router"
 import type { Route } from "./+types/list.task"
 
 import type { Task } from "~/models"
-import * as taskRepo from '../../services/task.repo'
+import { removeTaskAction, setSelectedAction, type TaskState } from "~/store/task.slice"
 import { setThemeAction, type ThemeState } from "~/store/theme.slice"
 
 import TaskItem from "./item.task"
@@ -23,16 +23,15 @@ export default function TaskList() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const theme = useSelector((state: { theme: ThemeState }) => state.theme)
-
-    const [tasks, setTasks] = React.useState(taskRepo.getList())
+    const tasks = useSelector((state: { task: TaskState }) => state.task.tasks)
 
     function onEdit(task: Task) {
+        setSelectedAction(dispatch, task.id!)
         navigate(`/task/update/${task.id}`)
     }
 
     function onDelete(task: Task) {
-        taskRepo.remove(task.id!)
-        setTasks(taskRepo.getList())
+        removeTaskAction(dispatch, task.id!)
     }
 
     function changeTheme() {

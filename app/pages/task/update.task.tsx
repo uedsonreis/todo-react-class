@@ -1,12 +1,12 @@
 import React from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router"
 
 import type { Route } from "./+types/list.task"
 
-import * as taskRepo from "../../services/task.repo"
 import MyInput from "~/components/my.input"
 import type { ThemeState } from "~/store/theme.slice"
+import { updateTaskAction, type TaskState } from "~/store/task.slice"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -17,10 +17,11 @@ export function meta({}: Route.MetaArgs) {
 export default function UpdateTask() {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const route = useParams<{ id: string }>()
-    const theme = useSelector((state: { theme: ThemeState }) => state.theme)
 
-    const task = taskRepo.get(Number(route.id!))
+    const theme = useSelector((state: { theme: ThemeState }) => state.theme)
+    const task = useSelector((state: { task: TaskState }) => state.task.selected)
 
     if (!task) return <div className="container">Tarefa não encontrada!</div>
 
@@ -38,7 +39,7 @@ export default function UpdateTask() {
             return
         }
 
-        taskRepo.update({ ...task, title, description, done })
+        updateTaskAction(dispatch, { ...task, title, description, done })
         goBack()
     }
 

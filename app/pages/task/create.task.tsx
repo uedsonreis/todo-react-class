@@ -1,12 +1,13 @@
 import React from "react"
-import { useSelector } from "react-redux"
 import { useNavigate } from "react-router"
+import { useDispatch, useSelector } from "react-redux"
 
 import type { Route } from "./+types/list.task"
 
-import * as taskRepo from "../../services/task.repo"
-import MyInput from "~/components/my.input"
+import { addTaskAction } from '../../store/task.slice'
 import type { ThemeState } from "~/store/theme.slice"
+
+import MyInput from "~/components/my.input"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -17,6 +18,7 @@ export function meta({}: Route.MetaArgs) {
 export default function CreateTask() {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const theme = useSelector((state: { theme: ThemeState }) => state.theme)
 
     const [title, setTitle] = React.useState("")
@@ -32,7 +34,7 @@ export default function CreateTask() {
             return
         }
 
-        taskRepo.add({ title, description, done: false })
+        addTaskAction(dispatch, { title, description, done: false })
         goBack()
     }
 
