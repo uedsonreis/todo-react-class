@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 import {
     isRouteErrorResponse,
     Links,
@@ -8,7 +9,7 @@ import {
     ScrollRestoration,
 } from "react-router"
 
-import { store } from './store'
+import { persistor, store } from './store'
 
 import type { Route } from "./+types/root"
 
@@ -48,7 +49,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
     return (
         <Provider store={store}>
-            <Outlet />
+            <PersistGate persistor={persistor} loading={null}>
+                <Outlet />
+            </PersistGate>
         </Provider>
     )
 }
