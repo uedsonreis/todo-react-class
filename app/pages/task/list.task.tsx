@@ -41,7 +41,7 @@ export default function TaskList() {
     return (
         <div className={`page ${theme.mode}`}>
             <header className="header">
-                <h2>Lista de Tarefas</h2>
+                <h2>Seja bem-vindo Fulano de Tal - Lista de Tarefas</h2>
                 <IoSunny className='themeIcon' onClick={changeTheme} />
             </header>
 
