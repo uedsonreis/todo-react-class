@@ -123,3 +123,15 @@ body {
     cursor: pointer;
     margin-left: 10px;
 }
+
+main {
+    margin: 40px;
+}
+
+.githubButton {
+    cursor: pointer;
+    border-width: 1px;
+    border-radius: 4px;
+    padding: 5px 16px 5px 16px;
+    background-color: #009933;
+}

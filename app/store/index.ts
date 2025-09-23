@@ -5,9 +5,6 @@ import storage from 'redux-persist/lib/storage'
 import { themeSlice } from './theme.slice'
 import { taskSlice } from './task.slice'
 
-const chave = import.meta.env.VITE_CLIENT_ID
-console.log(chave)
-
 const myStorage = {
     getItem: async (key: string) => {
         if (storage.getItem) return await storage.getItem(key)
